@@ -22,7 +22,8 @@
     "draft-js-plugins-editor": "^2.0.0-beta1",
     "normalizr": "^3.1.0",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "radar-chart-d3": "*"
   },
   "scripts": {
     "start": "react-scripts start",
