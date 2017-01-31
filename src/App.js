@@ -3,7 +3,7 @@ import Editor from 'draft-js-plugins-editor';
 import createHashtagPlugin from 'draft-js-hashtag-plugin';
 import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import { EditorState, ContentState, convertToRaw  } from 'draft-js';
-
+import './trint-css.css';
 import trumpSpeech from './trumpSpeech';
 
 const hashtagPlugin = createHashtagPlugin();
@@ -35,13 +35,14 @@ class MyEditor extends React.Component {
     if (!this.state.editorState) return null;
     console.log(convertToRaw(this.state.editorState.getCurrentContent()));
     return (
-      <div className="Transcript">
-        <h1>TRINT-BBC</h1>
-        <Editor
-          editorState={this.state.editorState}
-          onChange={editorState => this.setState({ editorState })}
-          plugins={plugins}
-        />
+      <div className="EditorPage">
+        <div className="Transcript">
+          <Editor
+            editorState={this.state.editorState}
+            onChange={editorState => this.setState({ editorState })}
+            plugins={plugins}
+          />
+        </div>
       </div>
     );
   }
