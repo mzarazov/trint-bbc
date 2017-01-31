@@ -24,6 +24,7 @@ class MyEditor extends React.Component {
       [...prev[next.para], next] :
       [next],
     }), {});
+    console.log('wordsInParas', wordsInParas);
     const rawTranscript = Object.keys(wordsInParas)
       .map(para => wordsInParas[para].map(word => word.name).join(' '))
       .join('\n');
