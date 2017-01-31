@@ -1,0 +1,52 @@
+{
+  "extends": [
+    "plugin:flowtype/recommended",
+    "airbnb"
+  ],
+  "rules": {
+    "id-length": [2, {"min": 1}],
+    "handle-callback-err": 2,
+    "prefer-template": 2,
+    "react/jsx-boolean-value": [2, "always"],
+    "key-spacing": [2],
+    "no-multi-spaces": [2, {
+      "exceptions": {
+        "VariableDeclarator": true,
+        "ImportDeclaration": true
+      }
+    }],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-underscore-dangle": [0],
+    "react/forbid-prop-types": [0],
+    "global-require": [0],
+    "import/prefer-default-export": [0],
+    "no-plusplus": [0],
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/label-has-for": 0,
+    "react/sort-comp": [0]
+  },
+  "globals": {
+    "geoip2": true,
+    "track": true,
+    "filepicker": true,
+    "ga": true,
+    "mixpanel": true,
+    "_agile": true,
+    "Raven": true,
+    "_account": true,
+    "fbq": true
+  },
+  "plugins": [
+    "jsx-a11y",
+    "flowtype"
+  ],
+  "settings": {
+    "import/resolver": {
+      "webpack": "webpack.dev.config.js"
+    }
+  },
+  "env": {
+    "jest": true,
+    "browser": true
+  }
+}

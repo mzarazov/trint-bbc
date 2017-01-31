@@ -1,0 +1,33 @@
+{
+  "name": "trint-bbc",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "babel-eslint": "7.0.0",
+    "eslint": "^3.10.0",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-config-react-app": "^0.3.0",
+    "eslint-loader": "1.6.0",
+    "eslint-plugin-flowtype": "^2.21.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.7.1",
+    "react-scripts": "0.8.5"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "draft-js": "^0.10.0",
+    "draft-js-hashtag-plugin": "^2.0.0-beta1",
+    "draft-js-linkify-plugin": "^2.0.0-beta1",
+    "draft-js-plugins-editor": "^2.0.0-beta1",
+    "normalizr": "^3.1.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
