@@ -3,7 +3,6 @@ import Editor from 'draft-js-plugins-editor';
 import createHashtagPlugin from 'draft-js-hashtag-plugin';
 import createLinkifyPlugin from 'draft-js-linkify-plugin';
 import { EditorState, ContentState, convertToRaw  } from 'draft-js';
-// import RadarChart from 'radar-chart-d3';
 
 import './trint-css.css';
 import trumpSpeech from './trumpSpeech';
@@ -17,17 +16,16 @@ const plugins = [
   linkifyPlugin,
 ];
 
-console.log(window.RadarChart);
-
-// window.RadarChart.defaultConfig.color = function() {};
-// window.RadarChart.defaultConfig.radius = 3;
-// window.RadarChart.defaultConfig.w = 400;
-// window.RadarChart.defaultConfig.h = 400;
+// life…
+window.RadarChart.defaultConfig.radius = 3;
+window.RadarChart.defaultConfig.w = 400;
+window.RadarChart.defaultConfig.h = 400;
+const chart = window.RadarChart.chart();
 
 // compute time in ms
 for (let i = 0; i < sentiment.length; i++) {
   const [hh, mm, ss] = sentiment[i].start.split(':');
-  sentiment[i].time = ss * 1e3 + mm * 6e4 + hh * 36e5;
+  sentiment[i].time = (ss * 1e3) + (mm * 6e4) + (hh * 36e5);
 }
 
 // add end times
@@ -39,11 +37,11 @@ sentiment[sentiment.length - 1].end = sentiment[sentiment.length - 1].time + 6e4
 class MyEditor extends React.Component {
   state = {
     sentiment: {
-      anger: '0',
-      disgust: '0',
-      fear: '0',
-      joy: '0',
-      sadness: '0',
+      anger: '1',
+      disgust: '1',
+      fear: '1',
+      joy: '1',
+      sadness: '1',
     },
   };
 
@@ -64,51 +62,47 @@ class MyEditor extends React.Component {
     });
   }
 
-  componentDidMount() {
-    // const data = [
-    //   {
-    //     className: 'default',
-    //     axes: [
-    //       {axis: "anger", value: 1, yOffset: 10},
-    //       {axis: "disgust", value: 1},
-    //       {axis: "fear", value: 1},
-    //       {axis: "joy", value: 1},
-    //       {axis: "sadness", value: 1, xOffset: -20}
-    //     ]
-    //   }
-    // ];
-    // window.RadarChart.draw('.chart-container', data);
-  }
-
   handleTimeupdate(e) {
-    for (let i = 0;  i < sentiment.length ; i++) {
-      if (e.nativeEvent.srcElement.currentTime * 1e3 > sentiment[i].time && e.nativeEvent.srcElement.currentTime * 1e3 <= sentiment[i].end) {
+    const time = e.nativeEvent.srcElement.currentTime * 1e3;
+    for (let i = 0; i < sentiment.length; i++) {
+      if (time > sentiment[i].time && time <= sentiment[i].end) {
         this.setState({
-          sentiment: sentiment[i]
+          sentiment: sentiment[i],
         });
         break;
-      };
+      }
     }
+  }
 
-    // TODO move this to render
-    // const data = [
-    //   {
-    //     className: 'default',
-    //     axes: [
-    //       {axis: "anger", value: parseFloat(this.state.sentiment.anger), yOffset: 10},
-    //       {axis: "disgust", value: parseFloat(this.state.sentiment.disgust)},
-    //       {axis: "fear", value: parseFloat(this.state.sentiment.fear)},
-    //       {axis: "joy", value: parseFloat(this.state.sentiment.joy)},
-    //       {axis: "sadness", value: parseFloat(this.state.sentiment.sadness), xOffset: -20}
-    //     ]
-    //   }
-    // ];
-    // window.RadarChart.draw('.chart-container', data);
+  componentDidMount() {
+    const cfg = chart.config();
+    this.svg = window.d3.select('.chart-container').append('svg')
+      .attr('width', cfg.w + 50)
+      .attr('height', cfg.h + 50);
+  }
+
+  componentDidUpdate() {
+    const data = [
+      {
+        className: 'default',
+        axes: [
+          { axis: 'anger', value: parseFloat(this.state.sentiment.anger), yOffset: 10 },
+          { axis: 'disgust', value: parseFloat(this.state.sentiment.disgust) },
+          { axis: 'fear', value: parseFloat(this.state.sentiment.fear) },
+          { axis: 'joy', value: parseFloat(this.state.sentiment.joy) },
+          { axis: 'sadness', value: parseFloat(this.state.sentiment.sadness), xOffset: -20 },
+        ],
+      },
+    ];
+
+    const foo = this.svg.selectAll('g.foo').data([data]);
+    foo.enter().append('g').classed('foo', 1);
+    foo.call(chart);
   }
 
   render() {
     if (!this.state.editorState) return null;
-    console.log(convertToRaw(this.state.editorState.getCurrentContent()));
+    // console.log(convertToRaw(this.state.editorState.getCurrentContent()));
     return (
       <div className="EditorPage">
         <div className="Transcript">
