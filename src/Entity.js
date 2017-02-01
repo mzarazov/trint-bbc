@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-convertFromRaw,
-convertToRaw,
-CompositeDecorator,
-ContentState,
-Editor,
-EditorState,
+  convertFromRaw,
+  convertToRaw,
+  CompositeDecorator,
+  ContentState,
+  Editor,
+  EditorState,
 } from 'draft-js';
 
 import './trint-css.css';
@@ -15,7 +15,7 @@ import trumpSpeech from './trumpSpeech';
 import sentiment from './sentiment';
 
 const flatten = list => list.reduce(
-(a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [],
+  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [],
 );
 
 window.RadarChart.defaultConfig.radius = 3;
@@ -35,9 +35,11 @@ for (let i = 0; i < sentiment.length - 1; i++) {
 }
 sentiment[sentiment.length - 1].end = sentiment[sentiment.length - 1].time + 6e4;
 
+
 class EntityEditorExample extends React.Component {
   constructor(props) {
     super(props);
+
     const decorator = new CompositeDecorator([
       {
         strategy: getEntityStrategy('IMMUTABLE'),
@@ -52,6 +54,7 @@ class EntityEditorExample extends React.Component {
         component: TokenSpan,
       },
     ]);
+
     const { words } = trumpSpeech.transcript;
     const wordsInParas = words.reduce((prev, next) => ({
       ...prev,
@@ -59,6 +62,7 @@ class EntityEditorExample extends React.Component {
       [...prev[next.para], next] :
       [next],
     }), {});
+
     const blocks = Object.keys(wordsInParas)
       .map(para => ({
         text: wordsInParas[para].map(word => word.name).join(' '),
@@ -79,6 +83,7 @@ class EntityEditorExample extends React.Component {
           };
         }, { position: 0, entityRanges: [] }).entityRanges,
       }));
+
     const entityMap = flatten(
       blocks.map(p => p.entityRanges),
     ).reduce((acc, e) => ({
@@ -109,7 +114,7 @@ class EntityEditorExample extends React.Component {
     };
 
     this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
+    this.onChange = editorState => this.setState({ editorState });
     this.logState = () => {
       const content = this.state.editorState.getCurrentContent();
       console.log(convertToRaw(content));
@@ -118,10 +123,12 @@ class EntityEditorExample extends React.Component {
 
   handleTimeupdate(e) {
     const time = e.nativeEvent.srcElement.currentTime * 1e3;
+
     this.props.dispatch({
       type: 'INPUT_UPDATED',
       inputValue: time,
-    })
+    });
+
     for (let i = 0; i < sentiment.length; i++) {
       if (time > sentiment[i].time && time <= sentiment[i].end) {
         this.setState({
@@ -208,7 +215,7 @@ function getEntityStrategy(mutability) {
       }
       return contentState.getEntity(entityKey).getMutability() === mutability;
     },
-    callback
+    callback,
     );
   };
 }
@@ -221,6 +228,7 @@ function getDecoratedStyle(mutability) {
     default: return null;
   }
 }
+
 const shouldColor = (inputState, data) => {
   if (!inputState || !data.previousTime) return false;
   return (inputState - data.previousTime) > 0 && (inputState - data.time) < 0;
