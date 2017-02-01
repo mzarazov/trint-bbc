@@ -6,13 +6,25 @@ import {
   convertToRaw,
   CompositeDecorator,
   ContentState,
-  Editor,
+  // Editor,
   EditorState,
 } from 'draft-js';
 
+import Editor from 'draft-js-plugins-editor';
+
+import createMentionPlugin, { defaultSuggestionsFilter } from 'draft-js-mention-plugin'; // eslint-disable-line import/no-unresolved
+
 import './trint-css.css';
+import 'draft-js-mention-plugin/lib/plugin.css'; // eslint-disable-line import/no-unresolved
+
 import trumpSpeech from './trumpSpeech';
 import sentiment from './sentiment';
+import mentions from './mentions';
+
+const mentionPlugin = createMentionPlugin();
+const { MentionSuggestions } = mentionPlugin;
+const plugins = [mentionPlugin];
+window.mentionPlugin = mentionPlugin;
 
 const flatten = list => list.reduce(
   (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [],
@@ -111,6 +123,7 @@ class EntityEditorExample extends React.Component {
         joy: '1',
         sadness: '1',
       },
+      suggestions: mentions,
     };
 
     this.focus = () => this.refs.editor.focus();
@@ -137,6 +150,16 @@ class EntityEditorExample extends React.Component {
         break;
       }
     }
+  }
+
+  onSearchChange({ value }) {
+    this.setState({
+      suggestions: defaultSuggestionsFilter(value, mentions),
+    });
+  }
+
+  onAddMention() {
+    // get the mention object selected
   }
 
   componentDidMount() {
@@ -183,7 +206,13 @@ class EntityEditorExample extends React.Component {
             editorState={this.state.editorState}
             onChange={this.onChange}
             placeholder="Enter some text..."
+            plugins={plugins}
             ref="editor"
+          />
+          <MentionSuggestions
+            onSearchChange={this.onSearchChange.bind(this)}
+            suggestions={this.state.suggestions}
+            onAddMention={this.onAddMention}
           />
         </div>
         <input
