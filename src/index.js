@@ -4,7 +4,6 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 import Entity from './Entity';
-import './index.css';
 
 const inputState = (state = '', action) => {
   switch (action.type) {
